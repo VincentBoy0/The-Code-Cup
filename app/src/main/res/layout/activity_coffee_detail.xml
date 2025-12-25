@@ -43,6 +43,39 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <!-- Icon Cart với badge số lượng -->
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/iv_cart"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_cart"
+                android:contentDescription="Cart"
+                app:tint="@color/white" />
+
+            <!-- Badge hiển thị số lượng item trong giỏ -->
+            <TextView
+                android:id="@+id/tv_cart_badge"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="-4dp"
+                android:layout_marginEnd="-4dp"
+                android:background="@drawable/bg_badge"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
     </RelativeLayout>
 
     <!-- ==================== NỘI DUNG ==================== -->
@@ -231,6 +264,111 @@
                             android:scaleType="center"
                             android:background="@drawable/bg_button_circle"
                             android:contentDescription="Increase" />
+
+                    </LinearLayout>
+
+                    <!-- Đường kẻ phân cách -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="16dp"
+                        android:background="#E0E0E0" />
+
+                    <!-- ==================== CHỌN LOẠI LY ==================== -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cup Type"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <!-- Ly thường -->
+                        <Button
+                            android:id="@+id/btn_cup_regular"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:text="Regular Cup"
+                            android:textSize="14sp"
+                            android:backgroundTint="@color/coffee_primary" />
+
+                        <!-- Ly nhựa -->
+                        <Button
+                            android:id="@+id/btn_cup_plastic"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="Plastic Cup"
+                            android:textSize="14sp"
+                            android:backgroundTint="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                    <!-- Đường kẻ phân cách -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="16dp"
+                        android:background="#E0E0E0" />
+
+                    <!-- ==================== CHỌN ĐÁ ==================== -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ice Level"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <!-- Không đá -->
+                        <Button
+                            android:id="@+id/btn_ice_none"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:text="No Ice"
+                            android:textSize="12sp"
+                            android:backgroundTint="@color/text_secondary" />
+
+                        <!-- Ít đá -->
+                        <Button
+                            android:id="@+id/btn_ice_less"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="8dp"
+                            android:text="Less Ice"
+                            android:textSize="12sp"
+                            android:backgroundTint="@color/coffee_primary" />
+
+                        <!-- Nhiều đá -->
+                        <Button
+                            android:id="@+id/btn_ice_more"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="More Ice"
+                            android:textSize="12sp"
+                            android:backgroundTint="@color/text_secondary" />
 
                     </LinearLayout>
 

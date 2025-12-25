@@ -1,13 +1,22 @@
 package com.example.codecutcodeshit;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.codecutcodeshit.adapter.CartAdapter;
+import com.example.codecutcodeshit.manager.CartManager;
+import com.example.codecutcodeshit.model.CartItem;
 
 import java.util.Locale;
 
@@ -24,12 +33,16 @@ import java.util.Locale;
 public class CoffeeDetailActivity extends AppCompatActivity {
 
     // ===== Khai báo các View =====
-    private ImageView ivBack, ivCoffeeDetail;
+    private ImageView ivBack, ivCoffeeDetail, ivCart;
     private TextView tvDetailName, tvDetailPrice, tvDetailDescription;
-    private TextView tvQuantity;
+    private TextView tvQuantity, tvCartBadge;
     private Button btnSizeS, btnSizeM, btnSizeL;
     private ImageButton btnDecrease, btnIncrease;
     private Button btnAddToCart;
+
+    // Buttons cho tùy chỉnh sản phẩm
+    private Button btnCupRegular, btnCupPlastic;
+    private Button btnIceNone, btnIceLess, btnIceMore;
 
     // ===== Biến lưu trữ dữ liệu =====
     private int coffeeId;
@@ -41,6 +54,10 @@ public class CoffeeDetailActivity extends AppCompatActivity {
     private int quantity = 1;           // Số lượng mặc định
     private String selectedSize = "S";  // Size mặc định
     private double sizeMultiplier = 1.0; // Hệ số giá theo size
+
+    // Tùy chỉnh sản phẩm
+    private String selectedCup = "regular";  // Loại ly: regular, plastic
+    private String selectedIce = "less";     // Mức đá: none, less, more
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +102,8 @@ public class CoffeeDetailActivity extends AppCompatActivity {
     private void initViews() {
         ivBack = findViewById(R.id.iv_back);
         ivCoffeeDetail = findViewById(R.id.iv_coffee_detail);
+        ivCart = findViewById(R.id.iv_cart);
+        tvCartBadge = findViewById(R.id.tv_cart_badge);
 
         tvDetailName = findViewById(R.id.tv_detail_name);
         tvDetailPrice = findViewById(R.id.tv_detail_price);
@@ -99,6 +118,13 @@ public class CoffeeDetailActivity extends AppCompatActivity {
         btnIncrease = findViewById(R.id.btn_increase);
 
         btnAddToCart = findViewById(R.id.btn_add_to_cart);
+
+        // Tùy chỉnh sản phẩm
+        btnCupRegular = findViewById(R.id.btn_cup_regular);
+        btnCupPlastic = findViewById(R.id.btn_cup_plastic);
+        btnIceNone = findViewById(R.id.btn_ice_none);
+        btnIceLess = findViewById(R.id.btn_ice_less);
+        btnIceMore = findViewById(R.id.btn_ice_more);
     }
 
     /**
@@ -111,6 +137,22 @@ public class CoffeeDetailActivity extends AppCompatActivity {
 
         // Cập nhật giá
         updatePrice();
+
+        // Cập nhật badge giỏ hàng
+        updateCartBadge();
+    }
+
+    /**
+     * Cập nhật badge số lượng trên icon giỏ hàng
+     */
+    private void updateCartBadge() {
+        int itemCount = CartManager.getInstance().getItemCount();
+        if (itemCount > 0) {
+            tvCartBadge.setVisibility(View.VISIBLE);
+            tvCartBadge.setText(String.valueOf(itemCount > 99 ? "99+" : itemCount));
+        } else {
+            tvCartBadge.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -157,14 +199,49 @@ public class CoffeeDetailActivity extends AppCompatActivity {
 
         // ===== Nút thêm vào giỏ hàng =====
         btnAddToCart.setOnClickListener(v -> {
-            // Tạo thông báo Toast
-            String message = String.format(Locale.US, "Added %d x %s (Size %s) to cart!",
-                    quantity, coffeeName, selectedSize);
+            // Tạo CartItem
+            double unitPrice = coffeePrice * sizeMultiplier;
+            CartItem cartItem = new CartItem(
+                    CartManager.getInstance().getNextId(),
+                    coffeeId,
+                    coffeeName,
+                    selectedSize,
+                    selectedCup,
+                    selectedIce,
+                    quantity,
+                    unitPrice,
+                    coffeeImageResId
+            );
 
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            // Thêm vào giỏ hàng
+            CartManager.getInstance().addItem(cartItem);
 
-            // TODO: Thực sự thêm vào giỏ hàng (sẽ làm sau)
+            // Cập nhật badge
+            updateCartBadge();
+
+            // Hiển thị thông báo
+            String cupType = selectedCup.equals("regular") ? "Regular Cup" : "Plastic Cup";
+            String iceLevel = selectedIce.equals("none") ? "No Ice" :
+                    (selectedIce.equals("less") ? "Less Ice" : "More Ice");
+
+            String message = String.format(Locale.US,
+                    "Added %d x %s\nSize: %s | %s | %s",
+                    quantity, coffeeName, selectedSize, cupType, iceLevel);
+
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         });
+
+        // ===== Icon giỏ hàng - Hiển thị Cart Preview =====
+        ivCart.setOnClickListener(v -> showCartPreviewDialog());
+
+        // ===== Các nút chọn loại ly =====
+        btnCupRegular.setOnClickListener(v -> selectCupType("regular"));
+        btnCupPlastic.setOnClickListener(v -> selectCupType("plastic"));
+
+        // ===== Các nút chọn mức đá =====
+        btnIceNone.setOnClickListener(v -> selectIceLevel("none"));
+        btnIceLess.setOnClickListener(v -> selectIceLevel("less"));
+        btnIceMore.setOnClickListener(v -> selectIceLevel("more"));
     }
 
     /**
@@ -189,6 +266,110 @@ public class CoffeeDetailActivity extends AppCompatActivity {
 
         // Cập nhật giá
         updatePrice();
+    }
+
+    /**
+     * Xử lý khi user chọn loại ly
+     *
+     * @param cupType Loại ly: "regular" hoặc "plastic"
+     */
+    private void selectCupType(String cupType) {
+        selectedCup = cupType;
+
+        // Cập nhật UI - đổi màu nút được chọn
+        btnCupRegular.setBackgroundTintList(getResources().getColorStateList(
+                cupType.equals("regular") ? R.color.coffee_primary : R.color.text_secondary, null));
+        btnCupPlastic.setBackgroundTintList(getResources().getColorStateList(
+                cupType.equals("plastic") ? R.color.coffee_primary : R.color.text_secondary, null));
+    }
+
+    /**
+     * Xử lý khi user chọn mức đá
+     *
+     * @param iceLevel Mức đá: "none", "less", hoặc "more"
+     */
+    private void selectIceLevel(String iceLevel) {
+        selectedIce = iceLevel;
+
+        // Cập nhật UI - đổi màu nút được chọn
+        btnIceNone.setBackgroundTintList(getResources().getColorStateList(
+                iceLevel.equals("none") ? R.color.coffee_primary : R.color.text_secondary, null));
+        btnIceLess.setBackgroundTintList(getResources().getColorStateList(
+                iceLevel.equals("less") ? R.color.coffee_primary : R.color.text_secondary, null));
+        btnIceMore.setBackgroundTintList(getResources().getColorStateList(
+                iceLevel.equals("more") ? R.color.coffee_primary : R.color.text_secondary, null));
+    }
+
+    /**
+     * Hiển thị Dialog xem trước giỏ hàng
+     */
+    private void showCartPreviewDialog() {
+        // Tạo AlertDialog với custom layout
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_cart_preview, null);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+
+        // Ánh xạ các View trong dialog
+        RecyclerView rvCartItems = dialogView.findViewById(R.id.rv_cart_items);
+        LinearLayout layoutEmptyCart = dialogView.findViewById(R.id.layout_empty_cart);
+        LinearLayout layoutTotal = dialogView.findViewById(R.id.layout_total);
+        View dividerTotal = dialogView.findViewById(R.id.divider_total);
+        TextView tvCartItemCount = dialogView.findViewById(R.id.tv_cart_item_count);
+        TextView tvCartTotal = dialogView.findViewById(R.id.tv_cart_total);
+        Button btnCheckout = dialogView.findViewById(R.id.btn_checkout);
+        ImageView ivCloseDialog = dialogView.findViewById(R.id.iv_close_dialog);
+
+        // Xử lý nút đóng dialog
+        ivCloseDialog.setOnClickListener(v -> dialog.dismiss());
+
+        // Lấy dữ liệu giỏ hàng
+        CartManager cartManager = CartManager.getInstance();
+
+        if (cartManager.isEmpty()) {
+            // Giỏ hàng trống
+            rvCartItems.setVisibility(View.GONE);
+            layoutEmptyCart.setVisibility(View.VISIBLE);
+            layoutTotal.setVisibility(View.GONE);
+            dividerTotal.setVisibility(View.GONE);
+            btnCheckout.setVisibility(View.GONE);
+            tvCartItemCount.setText("0 items");
+        } else {
+            // Có items trong giỏ
+            rvCartItems.setVisibility(View.VISIBLE);
+            layoutEmptyCart.setVisibility(View.GONE);
+            layoutTotal.setVisibility(View.VISIBLE);
+            dividerTotal.setVisibility(View.VISIBLE);
+            btnCheckout.setVisibility(View.VISIBLE);
+
+            // Setup RecyclerView
+            rvCartItems.setLayoutManager(new LinearLayoutManager(this));
+            CartAdapter cartAdapter = new CartAdapter(this, cartManager.getCartItems(),
+                    item -> {
+                        // Xử lý xóa item
+                        cartManager.removeItem(item.getId());
+                        updateCartBadge();
+
+                        // Refresh dialog
+                        dialog.dismiss();
+                        showCartPreviewDialog();
+                    });
+            rvCartItems.setAdapter(cartAdapter);
+
+            // Cập nhật thông tin
+            int itemCount = cartManager.getItemCount();
+            tvCartItemCount.setText(itemCount + (itemCount == 1 ? " item" : " items"));
+            tvCartTotal.setText(String.format(Locale.US, "$%.2f", cartManager.getTotalPrice()));
+        }
+
+        // Xử lý nút Checkout
+        btnCheckout.setOnClickListener(v -> {
+            dialog.dismiss();
+            Toast.makeText(this, "Checkout - Coming Soon!", Toast.LENGTH_SHORT).show();
+        });
+
+        dialog.show();
     }
 }
 
