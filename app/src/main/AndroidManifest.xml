@@ -26,6 +26,41 @@
             android:name=".CoffeeDetailActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
+
+        <!-- Màn hình giỏ hàng -->
+        <activity
+            android:name=".CartActivity"
+            android:exported="false"
+            android:parentActivityName=".CoffeeDetailActivity" />
+
+        <!-- Màn hình đặt hàng thành công -->
+        <activity
+            android:name=".OrderSuccessActivity"
+            android:exported="false" />
+
+        <!-- Màn hình danh sách đơn hàng -->
+        <activity
+            android:name=".MyOrdersActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Màn hình Rewards -->
+        <activity
+            android:name=".RewardsActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Màn hình Redeem Rewards -->
+        <activity
+            android:name=".RedeemActivity"
+            android:exported="false"
+            android:parentActivityName=".RewardsActivity" />
+
+        <!-- Màn hình Profile -->
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

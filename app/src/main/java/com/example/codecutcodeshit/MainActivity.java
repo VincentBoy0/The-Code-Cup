@@ -3,6 +3,7 @@ package com.example.codecutcodeshit;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.codecutcodeshit.adapter.CoffeeAdapter;
+import com.example.codecutcodeshit.manager.CartManager;
+import com.example.codecutcodeshit.manager.RewardsManager;
 import com.example.codecutcodeshit.model.Coffee;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -32,7 +35,7 @@ import java.util.List;
  * - Activity xử lý logic và tương tác người dùng
  *
  * Cấu trúc màn hình:
- * 1. Header: Logo + Tên app + Icon thông báo
+ * 1. Header: Logo + Tên app + Icon giỏ hàng
  * 2. Loyalty Card: Thẻ khách hàng thân thiết
  * 3. Coffee List: Danh sách sản phẩm (RecyclerView)
  * 4. Bottom Navigation: Thanh điều hướng dưới cùng
@@ -40,11 +43,16 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnCoffeeClickListener {
 
     // ===== Khai báo các View =====
-    // Các biến này sẽ được liên kết với View trong layout XML
     private RecyclerView rvCoffeeList;
     private BottomNavigationView bottomNavigation;
-    private ImageView ivNotification;
+    private ImageView ivCart;
+    private TextView tvCartBadge;
     private TextView tvCustomerName;
+
+    // Loyalty Card Views
+    private ImageView[] homeStamps = new ImageView[8];
+    private TextView tvStampCount;
+    private TextView tvLoyaltyMessage;
 
     // ===== Dữ liệu =====
     private List<Coffee> coffeeList;
@@ -84,8 +92,21 @@ public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnC
     private void initViews() {
         rvCoffeeList = findViewById(R.id.rv_coffee_list);
         bottomNavigation = findViewById(R.id.bottom_navigation);
-        ivNotification = findViewById(R.id.iv_notification);
+        ivCart = findViewById(R.id.iv_cart);
+        tvCartBadge = findViewById(R.id.tv_cart_badge);
         tvCustomerName = findViewById(R.id.tv_customer_name);
+
+        // Loyalty Card Views
+        tvStampCount = findViewById(R.id.tv_stamp_count);
+        tvLoyaltyMessage = findViewById(R.id.tv_loyalty_message);
+        homeStamps[0] = findViewById(R.id.home_stamp_1);
+        homeStamps[1] = findViewById(R.id.home_stamp_2);
+        homeStamps[2] = findViewById(R.id.home_stamp_3);
+        homeStamps[3] = findViewById(R.id.home_stamp_4);
+        homeStamps[4] = findViewById(R.id.home_stamp_5);
+        homeStamps[5] = findViewById(R.id.home_stamp_6);
+        homeStamps[6] = findViewById(R.id.home_stamp_7);
+        homeStamps[7] = findViewById(R.id.home_stamp_8);
     }
 
     /**
@@ -168,14 +189,17 @@ public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnC
                 if (itemId == R.id.nav_home) {
                     // Đang ở Home rồi, không cần làm gì
                     return true;
-                } else if (itemId == R.id.nav_menu) {
-                    Toast.makeText(MainActivity.this, "Menu - Coming Soon!", Toast.LENGTH_SHORT).show();
-                    return true;
                 } else if (itemId == R.id.nav_orders) {
-                    Toast.makeText(MainActivity.this, "Orders - Coming Soon!", Toast.LENGTH_SHORT).show();
+                    // Chuyển đến màn hình My Orders
+                    startActivity(new Intent(MainActivity.this, MyOrdersActivity.class));
+                    return true;
+                } else if (itemId == R.id.nav_rewards) {
+                    // Chuyển đến màn hình Rewards
+                    startActivity(new Intent(MainActivity.this, RewardsActivity.class));
                     return true;
                 } else if (itemId == R.id.nav_profile) {
-                    Toast.makeText(MainActivity.this, "Profile - Coming Soon!", Toast.LENGTH_SHORT).show();
+                    // Chuyển đến màn hình Profile
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                     return true;
                 }
 
@@ -188,10 +212,64 @@ public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnC
      * Thiết lập các sự kiện click khác
      */
     private void setupListeners() {
-        // Click vào icon thông báo
-        ivNotification.setOnClickListener(v -> {
-            Toast.makeText(this, "No new notifications", Toast.LENGTH_SHORT).show();
+        // Click vào icon giỏ hàng - chuyển đến CartActivity
+        ivCart.setOnClickListener(v -> {
+            startActivity(new Intent(this, CartActivity.class));
         });
+    }
+
+    /**
+     * Cập nhật badge số lượng trên icon giỏ hàng
+     */
+    private void updateCartBadge() {
+        int itemCount = CartManager.getInstance().getItemCount();
+        if (itemCount > 0) {
+            tvCartBadge.setVisibility(View.VISIBLE);
+            tvCartBadge.setText(String.valueOf(itemCount > 99 ? "99+" : itemCount));
+        } else {
+            tvCartBadge.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Cập nhật Loyalty Card từ RewardsManager
+     * Đồng bộ với Rewards Screen
+     */
+    private void updateLoyaltyCard() {
+        RewardsManager rewardsManager = RewardsManager.getInstance();
+        int stampCount = rewardsManager.getStampCount();
+
+        // Cập nhật stamp count text
+        tvStampCount.setText(stampCount + "/" + RewardsManager.MAX_STAMPS);
+
+        // Cập nhật stamps visual
+        for (int i = 0; i < homeStamps.length; i++) {
+            if (i < stampCount) {
+                homeStamps[i].setImageResource(R.drawable.ic_stamp_filled);
+            } else {
+                homeStamps[i].setImageResource(R.drawable.ic_stamp_empty);
+            }
+        }
+
+        // Cập nhật message
+        int remaining = rewardsManager.getStampsRemaining();
+        if (remaining == 0) {
+            tvLoyaltyMessage.setText("🎉 Bonus points earned!");
+        } else {
+            tvLoyaltyMessage.setText(remaining + " more stamp" + (remaining > 1 ? "s" : "") + " for +"
+                    + RewardsManager.LOYALTY_BONUS_POINTS + " bonus points!");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Cập nhật badge khi quay lại màn hình
+        updateCartBadge();
+        // Cập nhật loyalty card
+        updateLoyaltyCard();
+        // Đặt lại selected item cho bottom navigation
+        bottomNavigation.setSelectedItemId(R.id.nav_home);
     }
 
     /**

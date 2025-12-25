@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    LAYOUT MÀN HÌNH DANH SÁCH ĐƠN HÀNG (My Orders)
+
+    2 section: Ongoing Orders và Order History
+    Có bottom navigation giống các màn hình khác
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light"
+    tools:context=".MyOrdersActivity">
+
+    <!-- ==================== HEADER ==================== -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/coffee_primary"
+        android:padding="16dp">
+
+        <!-- Logo/Icon -->
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_coffee_cup"
+            android:contentDescription="Logo"
+            app:tint="@color/white" />
+
+        <!-- Tiêu đề -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="My Orders"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <!-- ==================== NỘI DUNG ==================== -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- ===== ONGOING ORDERS SECTION ===== -->
+            <TextView
+                android:id="@+id/tv_ongoing_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ongoing Orders"
+                android:textColor="@color/coffee_primary_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/ic_ongoing"
+                android:drawablePadding="8dp"
+                app:drawableTint="@color/status_preparing" />
+
+            <TextView
+                android:id="@+id/tv_ongoing_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Tap to mark as completed"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_ongoing_orders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Khi không có ongoing orders -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_no_ongoing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/card_background"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <TextView
+                    android:id="@+id/tv_no_ongoing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="24dp"
+                    android:gravity="center"
+                    android:text="No ongoing orders"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- ===== ORDER HISTORY SECTION ===== -->
+            <TextView
+                android:id="@+id/tv_history_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Order History"
+                android:textColor="@color/coffee_primary_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/ic_history"
+                android:drawablePadding="8dp"
+                app:drawableTint="@color/status_completed" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_history_orders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Khi không có history -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_no_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/card_background"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <TextView
+                    android:id="@+id/tv_no_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="24dp"
+                    android:gravity="center"
+                    android:text="No order history yet"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- ===== KHI KHÔNG CÓ ĐƠN HÀNG NÀO ===== -->
+            <LinearLayout
+                android:id="@+id/layout_empty_orders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="48dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ic_orders"
+                    app:tint="@color/text_secondary"
+                    android:contentDescription="No orders" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="No orders yet"
+                    android:textColor="@color/text_primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Start ordering some delicious coffee!"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:gravity="center" />
+
+                <Button
+                    android:id="@+id/btn_start_ordering"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:paddingHorizontal="32dp"
+                    android:text="Browse Menu"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/coffee_primary" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- ==================== BOTTOM NAVIGATION ==================== -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
+
+</LinearLayout>
+

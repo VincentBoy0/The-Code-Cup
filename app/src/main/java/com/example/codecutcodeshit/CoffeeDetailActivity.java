@@ -1,5 +1,6 @@
 package com.example.codecutcodeshit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -75,6 +76,15 @@ public class CoffeeDetailActivity extends AppCompatActivity {
 
         // Xử lý sự kiện
         setupListeners();
+    }
+
+    /**
+     * Cập nhật cart badge mỗi khi quay lại màn hình này
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateCartBadge();
     }
 
     /**
@@ -228,7 +238,11 @@ public class CoffeeDetailActivity extends AppCompatActivity {
                     "Added %d x %s\nSize: %s | %s | %s",
                     quantity, coffeeName, selectedSize, cupType, iceLevel);
 
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            // Chuyển đến màn hình My Cart
+            Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
         });
 
         // ===== Icon giỏ hàng - Hiển thị Cart Preview =====
@@ -318,7 +332,7 @@ public class CoffeeDetailActivity extends AppCompatActivity {
         View dividerTotal = dialogView.findViewById(R.id.divider_total);
         TextView tvCartItemCount = dialogView.findViewById(R.id.tv_cart_item_count);
         TextView tvCartTotal = dialogView.findViewById(R.id.tv_cart_total);
-        Button btnCheckout = dialogView.findViewById(R.id.btn_checkout);
+        Button btnGoToCart = dialogView.findViewById(R.id.btn_go_to_cart);
         ImageView ivCloseDialog = dialogView.findViewById(R.id.iv_close_dialog);
 
         // Xử lý nút đóng dialog
@@ -333,7 +347,7 @@ public class CoffeeDetailActivity extends AppCompatActivity {
             layoutEmptyCart.setVisibility(View.VISIBLE);
             layoutTotal.setVisibility(View.GONE);
             dividerTotal.setVisibility(View.GONE);
-            btnCheckout.setVisibility(View.GONE);
+            btnGoToCart.setVisibility(View.GONE);
             tvCartItemCount.setText("0 items");
         } else {
             // Có items trong giỏ
@@ -341,7 +355,7 @@ public class CoffeeDetailActivity extends AppCompatActivity {
             layoutEmptyCart.setVisibility(View.GONE);
             layoutTotal.setVisibility(View.VISIBLE);
             dividerTotal.setVisibility(View.VISIBLE);
-            btnCheckout.setVisibility(View.VISIBLE);
+            btnGoToCart.setVisibility(View.VISIBLE);
 
             // Setup RecyclerView
             rvCartItems.setLayoutManager(new LinearLayoutManager(this));
@@ -363,10 +377,10 @@ public class CoffeeDetailActivity extends AppCompatActivity {
             tvCartTotal.setText(String.format(Locale.US, "$%.2f", cartManager.getTotalPrice()));
         }
 
-        // Xử lý nút Checkout
-        btnCheckout.setOnClickListener(v -> {
+        // Xử lý nút Go to My Cart - chuyển đến CartActivity
+        btnGoToCart.setOnClickListener(v -> {
             dialog.dismiss();
-            Toast.makeText(this, "Checkout - Coming Soon!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, CartActivity.class));
         });
 
         dialog.show();

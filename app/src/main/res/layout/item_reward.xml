@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    LAYOUT CHO MỘT REWARD ITEM
+-->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/card_background"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Icon đồ uống -->
+        <ImageView
+            android:id="@+id/iv_reward_icon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_coffee_cup"
+            app:tint="@color/coffee_primary"
+            android:contentDescription="Reward" />
+
+        <!-- Thông tin -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_reward_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Free Espresso"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_reward_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Any size espresso drink"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <!-- Points required -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_points"
+                    app:tint="@color/coffee_accent"
+                    android:contentDescription="Points" />
+
+                <TextView
+                    android:id="@+id/tv_points_required"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="50 points"
+                    android:textColor="@color/coffee_accent"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Nút Redeem -->
+        <Button
+            android:id="@+id/btn_redeem"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:paddingHorizontal="16dp"
+            android:text="Redeem"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:backgroundTint="@color/coffee_primary" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+

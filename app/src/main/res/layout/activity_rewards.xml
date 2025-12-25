@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    LAYOUT MÀN HÌNH REWARDS
+
+    Hiển thị:
+    - Loyalty Card với stamps
+    - Tổng điểm thưởng
+    - Lịch sử điểm thưởng
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light"
+    tools:context=".RewardsActivity">
+
+    <!-- ==================== HEADER ==================== -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/coffee_primary"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_coffee_cup"
+            android:contentDescription="Logo"
+            app:tint="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Rewards"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <!-- ==================== NỘI DUNG ==================== -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- ===== LOYALTY CARD ===== -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/coffee_primary_dark"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_loyalty"
+                            app:tint="@color/loyalty_gold"
+                            android:contentDescription="Loyalty" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="Loyalty Card"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_stamp_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0/8"
+                            android:textColor="@color/loyalty_gold"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- Stamps Grid -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/stamp_1"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_stamp_empty"
+                            android:contentDescription="Stamp 1" />
+
+                        <ImageView
+                            android:id="@+id/stamp_2"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_stamp_empty"
+                            android:contentDescription="Stamp 2" />
+
+                        <ImageView
+                            android:id="@+id/stamp_3"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_stamp_empty"
+                            android:contentDescription="Stamp 3" />
+
+                        <ImageView
+                            android:id="@+id/stamp_4"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_stamp_empty"
+                            android:contentDescription="Stamp 4" />
+
+                        <ImageView
+                            android:id="@+id/stamp_5"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_stamp_empty"
+                            android:contentDescription="Stamp 5" />
+
+                        <ImageView
+                            android:id="@+id/stamp_6"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_stamp_empty"
+                            android:contentDescription="Stamp 6" />
+
+                        <ImageView
+                            android:id="@+id/stamp_7"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_stamp_empty"
+                            android:contentDescription="Stamp 7" />
+
+                        <ImageView
+                            android:id="@+id/stamp_8"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_stamp_empty"
+                            android:contentDescription="Stamp 8" />
+
+                    </LinearLayout>
+
+                    <!-- Message -->
+                    <TextView
+                        android:id="@+id/tv_loyalty_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="Collect stamps to earn bonus points!"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- ===== TOTAL POINTS CARD ===== -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/card_background"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Points"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tv_total_points"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="0"
+                                android:textColor="@color/coffee_accent"
+                                android:textSize="32sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_points"
+                            app:tint="@color/coffee_accent"
+                            android:contentDescription="Points" />
+
+                    </LinearLayout>
+
+                    <!-- Nút Redeem Drinks -->
+                    <Button
+                        android:id="@+id/btn_redeem_drinks"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:text="🎁 Redeem Drinks"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/coffee_accent" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- ===== POINTS HISTORY ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Reward History"
+                android:textColor="@color/coffee_primary_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_points_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Khi không có lịch sử -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_no_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/card_background"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="32dp"
+                    android:gravity="center"
+                    android:text="No reward history yet.\nComplete orders to earn points!"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:lineSpacingMultiplier="1.3" />
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- ==================== BOTTOM NAVIGATION ==================== -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
+
+</LinearLayout>
+
