@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    LAYOUT CHÍNH CỦA HOME SCREEN
+
+    LinearLayout là gì?
+    - Là container sắp xếp các View theo hàng dọc (vertical) hoặc ngang (horizontal)
+    - Ở đây dùng vertical: Header -> Content -> Bottom Navigation
+
+    Cấu trúc:
+    1. Header (trên cùng)
+    2. ScrollView chứa nội dung (giữa, có thể cuộn)
+    3. BottomNavigationView (dưới cùng)
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light"
+    tools:context=".MainActivity">
+
+    <!-- ==================== HEADER ==================== -->
+    <!--
+        RelativeLayout cho phép đặt View tương đối với nhau
+        Ở đây: Logo bên trái, tiêu đề ở giữa
+    -->
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/coffee_primary"
+        android:padding="16dp">
+
+        <!-- Icon cà phê (thay bằng logo thật sau) -->
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_coffee_cup"
+            android:contentDescription="Logo"
+            app:tint="@color/white" />
+
+        <!-- Tên quán -->
+        <TextView
+            android:id="@+id/tv_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="The Code Cup"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- Icon thông báo bên phải -->
+        <ImageView
+            android:id="@+id/iv_notification"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_notification"
+            android:contentDescription="Notifications"
+            app:tint="@color/white" />
+
+    </RelativeLayout>
+
+    <!-- ==================== NỘI DUNG CHÍNH ==================== -->
+    <!--
+        ScrollView cho phép cuộn nội dung khi quá dài
+        Bên trong chỉ chứa 1 ViewGroup con (LinearLayout)
+    -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- ========== LOYALTY CARD ========== -->
+            <!--
+                CardView tạo hiệu ứng "thẻ" với bo góc và shadow
+                Dùng để hiển thị thẻ khách hàng thân thiết
+            -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/loyalty_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/coffee_primary_dark"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Tiêu đề thẻ -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loyalty Card"
+                        android:textColor="@color/loyalty_gold"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <!-- Tên khách hàng -->
+                    <TextView
+                        android:id="@+id/tv_customer_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Welcome, Coffee Lover!"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <!-- Điểm tích lũy -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <!-- Các stamp (dấu đóng) - mô phỏng 10 ô -->
+                        <LinearLayout
+                            android:id="@+id/stamps_container"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <!-- Stamp 1-5 (đã đóng) -->
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="4dp"
+                                android:src="@drawable/ic_stamp_filled"
+                                app:tint="@color/loyalty_gold" />
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="4dp"
+                                android:src="@drawable/ic_stamp_filled"
+                                app:tint="@color/loyalty_gold" />
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="4dp"
+                                android:src="@drawable/ic_stamp_filled"
+                                app:tint="@color/loyalty_gold" />
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="4dp"
+                                android:src="@drawable/ic_stamp_filled"
+                                app:tint="@color/loyalty_gold" />
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="4dp"
+                                android:src="@drawable/ic_stamp_filled"
+                                app:tint="@color/loyalty_gold" />
+
+                            <!-- Stamp 6-10 (chưa đóng) -->
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="4dp"
+                                android:src="@drawable/ic_stamp_empty"
+                                app:tint="@color/white" />
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="4dp"
+                                android:src="@drawable/ic_stamp_empty"
+                                app:tint="@color/white" />
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="4dp"
+                                android:src="@drawable/ic_stamp_empty"
+                                app:tint="@color/white" />
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="4dp"
+                                android:src="@drawable/ic_stamp_empty"
+                                app:tint="@color/white" />
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_stamp_empty"
+                                app:tint="@color/white" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Text hướng dẫn -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="5 more stamps for a FREE coffee!"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- ========== TIÊU ĐỀ MENU ========== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="Our Menu"
+                android:textColor="@color/coffee_primary_dark"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <!-- ========== DANH SÁCH CÀ PHÊ ========== -->
+            <!--
+                RecyclerView hiển thị danh sách sản phẩm
+                nestedScrollingEnabled="false" để cuộn mượt trong ScrollView
+            -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_coffee_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- ==================== BOTTOM NAVIGATION ==================== -->
+    <!--
+        BottomNavigationView là thanh điều hướng dưới cùng
+        Cho phép chuyển đổi giữa các màn hình chính
+    -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
+
+</LinearLayout>
+

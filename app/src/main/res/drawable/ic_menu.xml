@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icon Menu cho Bottom Navigation -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M8.1,13.34L3.91,9.16C2.35,7.59 2.35,5.06 3.91,3.5V3.5C5.47,1.94 8,1.94 9.56,3.5L17.83,11.78C19.39,13.34 19.39,15.86 17.83,17.42V17.42C16.27,18.98 13.74,18.98 12.18,17.42L8.1,13.34ZM5.32,4.91C4.55,5.68 4.55,6.96 5.32,7.73L9.52,11.93C10.29,12.7 11.57,12.7 12.34,11.93C13.11,11.16 13.11,9.88 12.34,9.11L8.14,4.91C7.37,4.14 6.09,4.14 5.32,4.91ZM15.66,19.63L20.88,14.41L19.47,13L14.25,18.22L15.66,19.63ZM17.42,21.38L22.64,16.17L21.22,14.75L16,19.97L17.42,21.38Z"/>
+</vector>
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icon ly cà phê - dùng cho logo và danh sách sản phẩm -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M2,21V19H20V21H2ZM20,8V5H18V8H20ZM20,3C21.1,3 22,3.9 22,5V8C22,9.1 21.1,10 20,10H18V13C18,15.21 16.21,17 14,17H8C5.79,17 4,15.21 4,13V3H20ZM16,5H6V13C6,14.1 6.9,15 8,15H14C15.1,15 16,14.1 16,13V5Z"/>
+</vector>
+
