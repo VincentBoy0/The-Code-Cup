@@ -1,34 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- ========== MÀU CƠ BẢN ========== -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Màu chính của The Code Cup - Nâu cà phê -->
+    <!-- ========== MÀU THƯƠNG HIỆU - THE CODE CUP ========== -->
+    <!-- Nâu cà phê - Màu chính -->
     <color name="coffee_primary">#5D4037</color>
     <color name="coffee_primary_dark">#3E2723</color>
     <color name="coffee_primary_light">#8D6E63</color>
-    <color name="coffee_accent">#FFAB40</color>
+    <!-- Cam - Màu nhấn -->
+    <color name="coffee_accent">#f7bd6a</color>
 
-    <!-- Màu nền -->
+    <!-- ========== MÀU NỀN ========== -->
     <color name="background_light">#FFF8F0</color>
+    <color name="background_grey">#F5F5F5</color>
     <color name="card_background">#FFFFFF</color>
 
-    <!-- Màu text -->
+    <!-- ========== MÀU TEXT ========== -->
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#757575</color>
+    <color name="text_hint">#9E9E9E</color>
 
-    <!-- Màu loyalty card -->
-    <color name="loyalty_gold">#FFD54F</color>
+    <!-- ========== MÀU DIVIDER / BORDER ========== -->
+    <color name="divider">#E0E0E0</color>
+    <color name="border_light">#E0E0E0</color>
 
-    <!-- Màu swipe delete -->
-    <color name="swipe_delete_background">#eb6c6c</color>
+    <!-- ========== MÀU LOYALTY / REWARDS ========== -->
+    <color name="loyalty_gold">#f7f386</color>
 
-    <!-- Màu success -->
-    <color name="success_green">#4CAF50</color>
+    <!-- ========== MÀU TRẠNG THÁI ========== -->
+    <color name="success_green">#a1f7a9</color>
+    <color name="error_red">#fa8993</color>
+    <color name="warning_yellow">#faf878</color>
+    <color name="info_blue">#7ebbfc</color>
 
-    <!-- Màu Order Status -->
-    <color name="status_pending">#FFC107</color>
-    <color name="status_preparing">#2196F3</color>
-    <color name="status_ready">#4CAF50</color>
+    <!-- ========== MÀU ORDER STATUS ========== -->
+    <color name="status_pending">#faf684</color>
+    <color name="status_preparing">#82e0fa</color>
+    <color name="status_ready">#81f785</color>
     <color name="status_completed">#9E9E9E</color>
+
+    <!-- ========== MÀU BADGE ========== -->
+    <color name="badge_background">#f57389</color>
+
+    <!-- ========== MÀU SWIPE ACTION ========== -->
+    <color name="swipe_delete_background">#f5516d</color>
 </resources>

@@ -63,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginVertical="16dp"
-        android:background="#E0E0E0" />
+        android:background="@color/divider" />
 
     <!-- Danh sách items trong giỏ hàng - giới hạn chiều cao để cuộn -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -122,7 +122,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginVertical="16dp"
-        android:background="#E0E0E0"
+        android:background="@color/divider"
         android:visibility="gone" />
 
     <!-- Tổng tiền -->
