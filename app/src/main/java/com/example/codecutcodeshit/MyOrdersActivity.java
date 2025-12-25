@@ -173,7 +173,8 @@ public class MyOrdersActivity extends AppCompatActivity implements OrderAdapter.
                 .setTitle("Complete Order")
                 .setMessage("Mark Order #" + order.getOrderNumber() + " as completed?")
                 .setPositiveButton("Complete", (dialog, which) -> {
-                    order.markAsCompleted();
+                    // Gọi qua OrderManager để lưu vào storage
+                    orderManager.markOrderCompleted(order.getOrderNumber());
 
                     ongoingAdapter.updateOrders(orderManager.getOngoingOrders());
                     historyAdapter.updateOrders(orderManager.getCompletedOrders());

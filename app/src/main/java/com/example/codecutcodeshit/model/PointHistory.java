@@ -6,6 +6,10 @@ import java.util.Locale;
 
 /**
  * Model class đại diện cho một mục lịch sử điểm thưởng
+ *
+ * Hỗ trợ Gson serialization:
+ * - type: Enum được Gson serialize thành String
+ * - dateTimestamp: Lưu Date dưới dạng timestamp (long)
  */
 public class PointHistory {
 
@@ -17,26 +21,26 @@ public class PointHistory {
 
     private int points;
     private String description;
-    private Date date;
+    private long dateTimestamp; // Lưu Date dưới dạng timestamp cho Gson
     private Type type;
 
     public PointHistory(int points, String description, Type type) {
         this.points = points;
         this.description = description;
         this.type = type;
-        this.date = new Date();
+        this.dateTimestamp = System.currentTimeMillis();
     }
 
     // Getters
     public int getPoints() { return points; }
     public String getDescription() { return description; }
-    public Date getDate() { return date; }
+    public Date getDate() { return new Date(dateTimestamp); }
     public Type getType() { return type; }
 
     // Format ngày
     public String getFormattedDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
-        return sdf.format(date);
+        return sdf.format(getDate());
     }
 
     // Format điểm với dấu + hoặc -

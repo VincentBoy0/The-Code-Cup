@@ -46,4 +46,8 @@
 
     <!-- ========== MÀU SWIPE ACTION ========== -->
     <color name="swipe_delete_background">#f5516d</color>
+
+    <!-- ========== MÀU BOTTOM NAVIGATION ========== -->
+    <color name="bottom_nav_selected_bg">#1A8D6E63</color>
+    <color name="bottom_nav_indicator">#D7CCC8</color>
 </resources>

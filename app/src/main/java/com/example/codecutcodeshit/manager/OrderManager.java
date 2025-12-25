@@ -1,8 +1,14 @@
 package com.example.codecutcodeshit.manager;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.example.codecutcodeshit.model.CartItem;
 import com.example.codecutcodeshit.model.Order;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,14 +17,31 @@ import java.util.Random;
  * ORDER MANAGER - Quản lý danh sách đơn hàng
  *
  * Sử dụng Singleton Pattern
+ *
+ * DATA PERSISTENCE:
+ * - Sử dụng SharedPreferences để lưu trữ
+ * - Gson để chuyển đổi List<Order> ↔ JSON string
+ * - Lịch sử đơn hàng được lưu trữ vĩnh viễn
  */
 public class OrderManager {
 
+    // ===== CONSTANTS =====
+    private static final String PREF_NAME = "orders_data";
+    private static final String KEY_ORDERS = "orders_list";
+
+    // ===== SINGLETON =====
     private static OrderManager instance;
+
+    // ===== DATA =====
     private List<Order> orders;
+
+    // ===== PERSISTENCE =====
+    private SharedPreferences sharedPreferences;
+    private Gson gson;
 
     private OrderManager() {
         orders = new ArrayList<>();
+        gson = new Gson();
     }
 
     public static synchronized OrderManager getInstance() {
@@ -26,6 +49,43 @@ public class OrderManager {
             instance = new OrderManager();
         }
         return instance;
+    }
+
+    /**
+     * QUAN TRỌNG: Phải gọi method này khi app khởi động
+     *
+     * @param context Application context
+     */
+    public void init(Context context) {
+        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        loadFromStorage();
+    }
+
+    /**
+     * Load dữ liệu từ SharedPreferences
+     */
+    private void loadFromStorage() {
+        if (sharedPreferences == null) return;
+
+        String json = sharedPreferences.getString(KEY_ORDERS, "[]");
+        Type type = new TypeToken<List<Order>>(){}.getType();
+        orders = gson.fromJson(json, type);
+
+        if (orders == null) {
+            orders = new ArrayList<>();
+        }
+    }
+
+    /**
+     * Lưu dữ liệu vào SharedPreferences
+     */
+    private void saveToStorage() {
+        if (sharedPreferences == null) return;
+
+        String json = gson.toJson(orders);
+        sharedPreferences.edit()
+                .putString(KEY_ORDERS, json)
+                .apply();
     }
 
     /**
@@ -40,6 +100,7 @@ public class OrderManager {
         Order order = new Order(orderNumber, itemsCopy, totalPrice);
 
         orders.add(0, order);
+        saveToStorage(); // Lưu thay đổi
 
         // Thêm điểm thưởng và stamp
         RewardsManager.getInstance().addPointsFromOrder(orderNumber, totalPrice);
@@ -87,6 +148,7 @@ public class OrderManager {
         for (Order order : orders) {
             if (order.getOrderNumber() == orderNumber) {
                 order.markAsCompleted();
+                saveToStorage(); // Lưu thay đổi
                 break;
             }
         }
@@ -101,8 +163,12 @@ public class OrderManager {
         return orders.get(0);
     }
 
+    /**
+     * Xóa tất cả đơn hàng (cho testing)
+     */
     public void clearOrders() {
         orders.clear();
+        saveToStorage();
     }
 }
 

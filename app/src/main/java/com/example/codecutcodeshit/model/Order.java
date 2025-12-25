@@ -7,6 +7,10 @@ import java.util.Locale;
 
 /**
  * Model class đại diện cho một đơn hàng
+ *
+ * Hỗ trợ Gson serialization:
+ * - status: Enum được Gson serialize thành String
+ * - orderDate: Lưu dưới dạng timestamp (long) để tránh lỗi parsing
  */
 public class Order {
 
@@ -20,14 +24,15 @@ public class Order {
     private List<CartItem> items;
     private double totalPrice;
     private Status status;
-    private Date orderDate;
+    private long orderDateTimestamp; // Lưu Date dưới dạng timestamp cho Gson
 
+    // Constructor
     public Order(int orderNumber, List<CartItem> items, double totalPrice) {
         this.orderNumber = orderNumber;
         this.items = items;
         this.totalPrice = totalPrice;
         this.status = Status.ONGOING; // Mặc định là đang xử lý
-        this.orderDate = new Date();
+        this.orderDateTimestamp = System.currentTimeMillis();
     }
 
     // Getters
@@ -35,7 +40,10 @@ public class Order {
     public List<CartItem> getItems() { return items; }
     public double getTotalPrice() { return totalPrice; }
     public Status getStatus() { return status; }
-    public Date getOrderDate() { return orderDate; }
+
+    public Date getOrderDate() {
+        return new Date(orderDateTimestamp);
+    }
 
     // Setters
     public void setStatus(Status status) { this.status = status; }
@@ -73,7 +81,7 @@ public class Order {
     // Lấy ngày đặt hàng dạng text
     public String getFormattedDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.US);
-        return sdf.format(orderDate);
+        return sdf.format(getOrderDate());
     }
 }
 
