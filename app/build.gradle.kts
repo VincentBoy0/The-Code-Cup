@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.codecutcodeshit"
+    namespace = "com.example.codecup"
     compileSdk {
         version = release(36)
     }
