@@ -95,195 +95,237 @@
         ScrollView cho phép cuộn nội dung khi quá dài
         Bên trong chỉ chứa 1 ViewGroup con (LinearLayout)
     -->
-    <ScrollView
-        android:id="@+id/scroll"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-<!--    <ScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1">-->
-
-        <LinearLayout
+        <!-- ========== LOYALTY CARD ========== -->
+        <!--
+            CardView tạo hiệu ứng "thẻ" với bo góc và shadow
+            Đồng bộ với Rewards Screen - 8 stamps
+        -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/loyalty_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/coffee_primary_dark"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
 
-            <!-- ========== LOYALTY CARD ========== -->
-            <!--
-                CardView tạo hiệu ứng "thẻ" với bo góc và shadow
-                Đồng bộ với Rewards Screen - 8 stamps
-            -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/loyalty_card"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/coffee_primary_dark"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <!-- Header: Loyalty Card + Count -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                    <!-- Header: Loyalty Card + Count -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_loyalty"
+                        app:tint="@color/loyalty_gold"
+                        android:contentDescription="Loyalty" />
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_loyalty"
-                            app:tint="@color/loyalty_gold"
-                            android:contentDescription="Loyalty" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="8dp"
-                            android:text="Loyalty Card"
-                            android:textColor="@color/loyalty_gold"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_stamp_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0/8"
-                            android:textColor="@color/loyalty_gold"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                    <!-- Tên khách hàng -->
                     <TextView
-                        android:id="@+id/tv_customer_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Welcome, Coffee Lover!"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Loyalty Card"
+                        android:textColor="@color/loyalty_gold"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <!-- 8 Stamps -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:orientation="horizontal"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/home_stamp_1"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_margin="4dp"
-                            android:src="@drawable/ic_stamp_empty" />
-
-                        <ImageView
-                            android:id="@+id/home_stamp_2"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_margin="4dp"
-                            android:src="@drawable/ic_stamp_empty" />
-
-                        <ImageView
-                            android:id="@+id/home_stamp_3"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_margin="4dp"
-                            android:src="@drawable/ic_stamp_empty" />
-
-                        <ImageView
-                            android:id="@+id/home_stamp_4"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_margin="4dp"
-                            android:src="@drawable/ic_stamp_empty" />
-
-                        <ImageView
-                            android:id="@+id/home_stamp_5"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_margin="4dp"
-                            android:src="@drawable/ic_stamp_empty" />
-
-                        <ImageView
-                            android:id="@+id/home_stamp_6"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_margin="4dp"
-                            android:src="@drawable/ic_stamp_empty" />
-
-                        <ImageView
-                            android:id="@+id/home_stamp_7"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_margin="4dp"
-                            android:src="@drawable/ic_stamp_empty" />
-
-                        <ImageView
-                            android:id="@+id/home_stamp_8"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_margin="4dp"
-                            android:src="@drawable/ic_stamp_empty" />
-
-                    </LinearLayout>
-
-                    <!-- Text hướng dẫn -->
                     <TextView
-                        android:id="@+id/tv_loyalty_message"
+                        android:id="@+id/tv_stamp_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="8 stamps for +100 bonus points!"
-                        android:textColor="@color/white"
-                        android:textSize="12sp" />
+                        android:text="0/8"
+                        android:textColor="@color/loyalty_gold"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+                <!-- Tên khách hàng -->
+                <TextView
+                    android:id="@+id/tv_customer_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Welcome, Coffee Lover!"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-            <!-- ========== TIÊU ĐỀ MENU ========== -->
-            <TextView
+                <!-- 8 Stamps -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/home_stamp_1"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_stamp_empty" />
+
+                    <ImageView
+                        android:id="@+id/home_stamp_2"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_stamp_empty" />
+
+                    <ImageView
+                        android:id="@+id/home_stamp_3"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_stamp_empty" />
+
+                    <ImageView
+                        android:id="@+id/home_stamp_4"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_stamp_empty" />
+
+                    <ImageView
+                        android:id="@+id/home_stamp_5"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_stamp_empty" />
+
+                    <ImageView
+                        android:id="@+id/home_stamp_6"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_stamp_empty" />
+
+                    <ImageView
+                        android:id="@+id/home_stamp_7"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_stamp_empty" />
+
+                    <ImageView
+                        android:id="@+id/home_stamp_8"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_stamp_empty" />
+
+                </LinearLayout>
+
+                <!-- Text hướng dẫn -->
+                <TextView
+                    android:id="@+id/tv_loyalty_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="8 stamps for +100 bonus points!"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- ========== TIÊU ĐỀ MENU ========== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="Our Menu"
+            android:textColor="@color/coffee_primary_dark"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- Categories chip group -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:singleSelection="true"
+            app:chipSpacing="8dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_all"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:text="Our Menu"
-                android:textColor="@color/coffee_primary_dark"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:text="All"
+                android:checked="true" />
 
-            <!-- ========== DANH SÁCH CÀ PHÊ ========== -->
-            <!--
-                RecyclerView hiển thị danh sách sản phẩm
-                nestedScrollingEnabled="false" để cuộn mượt trong ScrollView
-                maxHeight giới hạn độ cao tối đa để tránh crash
-            -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_coffee_list"
-                android:layout_width="match_parent"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_coffee"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:clipToPadding="false" />
+                android:text="Coffee" />
 
-        </LinearLayout>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_tea"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tea" />
 
-    </ScrollView>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_breakfast"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Breakfast" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_cake"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cake" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_drinks"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Drinks" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <!-- ========== DANH SÁCH CÀ PHÊ ========== -->
+        <!--
+            RecyclerView hiển thị danh sách sản phẩm
+            nestedScrollingEnabled="false" để cuộn mượt trong ScrollView
+            maxHeight giới hạn độ cao tối đa để tránh crash
+        -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_coffee_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false" />
+
+    </LinearLayout>
 
     <!-- ==================== BOTTOM NAVIGATION ==================== -->
     <!--

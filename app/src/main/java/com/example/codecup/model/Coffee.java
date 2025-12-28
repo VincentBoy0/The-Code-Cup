@@ -16,6 +16,7 @@ public class Coffee {
     private String description;// Mô tả ngắn
     private double price;      // Giá tiền
     private int imageResId;    // ID của hình ảnh trong thư mục drawable
+    private String category;   // Thể loại: coffee, latte, tea, food, etc.
 
     /**
      * Constructor - Hàm khởi tạo để tạo đối tượng Coffee mới
@@ -26,6 +27,19 @@ public class Coffee {
         this.description = description;
         this.price = price;
         this.imageResId = imageResId;
+        this.category = "coffee"; // default category to preserve backward compatibility
+    }
+
+    /**
+     * New constructor with category
+     */
+    public Coffee(int id, String name, String description, double price, int imageResId, String category) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.imageResId = imageResId;
+        this.category = category != null ? category : "coffee";
     }
 
     // ===== GETTER methods =====
@@ -52,6 +66,8 @@ public class Coffee {
         return imageResId;
     }
 
+    public String getCategory() { return category; }
+
     // ===== SETTER methods =====
     // Setter là các method để THAY ĐỔI giá trị của thuộc tính
 
@@ -74,5 +90,6 @@ public class Coffee {
     public void setImageResId(int imageResId) {
         this.imageResId = imageResId;
     }
-}
 
+    public void setCategory(String category) { this.category = category; }
+}

@@ -36,6 +36,7 @@ public class CoffeeDetailActivity extends AppCompatActivity {
     // ===== Khai báo các View =====
     private ImageView ivBack, ivCoffeeDetail, ivCart;
     private TextView tvDetailName, tvDetailPrice, tvDetailDescription;
+    private TextView tvCupHeading, tvIceHeading;
     private TextView tvQuantity, tvCartBadge;
     private Button btnSizeS, btnSizeM, btnSizeL;
     private ImageButton btnDecrease, btnIncrease;
@@ -57,8 +58,10 @@ public class CoffeeDetailActivity extends AppCompatActivity {
     private double sizeMultiplier = 1.0; // Hệ số giá theo size
 
     // Tùy chỉnh sản phẩm
-    private String selectedCup = "regular";  // Loại ly: regular, plastic
-    private String selectedIce = "less";     // Mức đá: none, less, more
+    private String selectedCup = "regular";  // default for drinks: regular/plastic
+    private String selectedIce = "less";     // default for drinks: none/less/more
+    // For Cake/Breakfast these fields will store options: selectedCup -> option1, selectedIce -> option2
+    private String incomingCategory = "All";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,15 +82,6 @@ public class CoffeeDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Cập nhật cart badge mỗi khi quay lại màn hình này
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateCartBadge();
-    }
-
-    /**
      * Lấy dữ liệu được truyền từ MainActivity thông qua Intent
      */
     private void getIntentData() {
@@ -98,6 +92,8 @@ public class CoffeeDetailActivity extends AppCompatActivity {
         coffeeDescription = getIntent().getStringExtra("coffee_description");
         coffeePrice = getIntent().getDoubleExtra("coffee_price", 0.0);
         coffeeImageResId = getIntent().getIntExtra("coffee_image", R.drawable.ic_coffee_cup);
+        incomingCategory = getIntent().getStringExtra("coffee_category");
+        if (incomingCategory == null) incomingCategory = "All";
 
         // Nếu không có mô tả, dùng mô tả mặc định
         if (coffeeDescription == null || coffeeDescription.isEmpty()) {
@@ -118,6 +114,8 @@ public class CoffeeDetailActivity extends AppCompatActivity {
         tvDetailName = findViewById(R.id.tv_detail_name);
         tvDetailPrice = findViewById(R.id.tv_detail_price);
         tvDetailDescription = findViewById(R.id.tv_detail_description);
+        tvCupHeading = findViewById(R.id.tv_cup_heading);
+        tvIceHeading = findViewById(R.id.tv_ice_heading);
         tvQuantity = findViewById(R.id.tv_quantity);
 
         btnSizeS = findViewById(R.id.btn_size_s);
@@ -150,6 +148,37 @@ public class CoffeeDetailActivity extends AppCompatActivity {
 
         // Cập nhật badge giỏ hàng
         updateCartBadge();
+
+        // If item belongs to Cake or Breakfast, adjust option labels
+        if (incomingCategory.equalsIgnoreCase("Cake") || incomingCategory.equalsIgnoreCase("Breakfast")) {
+            // Update heading texts
+            tvCupHeading.setText("Options");
+            tvIceHeading.setText("Spice Level");
+
+            // Change headings by setting button texts
+            btnCupRegular.setText("With Jam");
+            btnCupPlastic.setText("No Jam");
+
+            btnIceNone.setText("Spicy");
+            btnIceLess.setText("Mild");
+            btnIceMore.setText("Non-Spicy");
+
+            // Set defaults for these items
+            selectedCup = "with_jam"; // maps to option1
+            selectedIce = "mild";     // maps to option2
+
+            // Update UI colors to reflect default selection
+            btnCupRegular.setBackgroundTintList(getResources().getColorStateList(R.color.coffee_primary, null));
+            btnCupPlastic.setBackgroundTintList(getResources().getColorStateList(R.color.text_secondary, null));
+            btnIceNone.setBackgroundTintList(getResources().getColorStateList(R.color.text_secondary, null));
+            btnIceLess.setBackgroundTintList(getResources().getColorStateList(R.color.coffee_primary, null));
+            btnIceMore.setBackgroundTintList(getResources().getColorStateList(R.color.text_secondary, null));
+        }
+        else {
+            // ensure headings are default for drinks
+            tvCupHeading.setText("Cup Type");
+            tvIceHeading.setText("Ice Level");
+        }
     }
 
     /**
@@ -234,6 +263,17 @@ public class CoffeeDetailActivity extends AppCompatActivity {
             String iceLevel = selectedIce.equals("none") ? "No Ice" :
                     (selectedIce.equals("less") ? "Less Ice" : "More Ice");
 
+            // If Cake/Breakfast, remap labels
+            if (incomingCategory.equalsIgnoreCase("Cake") || incomingCategory.equalsIgnoreCase("Breakfast")) {
+                // selectedCup holds option1 (with_jam / no_jam)
+                cupType = selectedCup.equals("with_jam") ? "With Jam" : "No Jam";
+
+                // selectedIce holds option2 (spicy/mild/non-spicy)
+                if (selectedIce.equals("spicy")) iceLevel = "Spicy";
+                else if (selectedIce.equals("mild")) iceLevel = "Mild";
+                else iceLevel = "Non-Spicy";
+            }
+
             String message = String.format(Locale.US,
                     "Added %d x %s\nSize: %s | %s | %s",
                     quantity, coffeeName, selectedSize, cupType, iceLevel);
@@ -249,13 +289,44 @@ public class CoffeeDetailActivity extends AppCompatActivity {
         ivCart.setOnClickListener(v -> showCartPreviewDialog());
 
         // ===== Các nút chọn loại ly =====
-        btnCupRegular.setOnClickListener(v -> selectCupType("regular"));
-        btnCupPlastic.setOnClickListener(v -> selectCupType("plastic"));
+        btnCupRegular.setOnClickListener(v -> {
+            if (incomingCategory.equalsIgnoreCase("Cake") || incomingCategory.equalsIgnoreCase("Breakfast")) {
+                // Toggle option: With Jam
+                selectCupType("with_jam");
+            } else {
+                selectCupType("regular");
+            }
+        });
+        btnCupPlastic.setOnClickListener(v -> {
+            if (incomingCategory.equalsIgnoreCase("Cake") || incomingCategory.equalsIgnoreCase("Breakfast")) {
+                selectCupType("no_jam");
+            } else {
+                selectCupType("plastic");
+            }
+        });
 
         // ===== Các nút chọn mức đá =====
-        btnIceNone.setOnClickListener(v -> selectIceLevel("none"));
-        btnIceLess.setOnClickListener(v -> selectIceLevel("less"));
-        btnIceMore.setOnClickListener(v -> selectIceLevel("more"));
+        btnIceNone.setOnClickListener(v -> {
+            if (incomingCategory.equalsIgnoreCase("Cake") || incomingCategory.equalsIgnoreCase("Breakfast")) {
+                selectIceLevel("spicy");
+            } else {
+                selectIceLevel("none");
+            }
+        });
+        btnIceLess.setOnClickListener(v -> {
+            if (incomingCategory.equalsIgnoreCase("Cake") || incomingCategory.equalsIgnoreCase("Breakfast")) {
+                selectIceLevel("mild");
+            } else {
+                selectIceLevel("less");
+            }
+        });
+        btnIceMore.setOnClickListener(v -> {
+            if (incomingCategory.equalsIgnoreCase("Cake") || incomingCategory.equalsIgnoreCase("Breakfast")) {
+                selectIceLevel("non_spicy");
+            } else {
+                selectIceLevel("more");
+            }
+        });
     }
 
     /**
@@ -291,10 +362,13 @@ public class CoffeeDetailActivity extends AppCompatActivity {
         selectedCup = cupType;
 
         // Cập nhật UI - đổi màu nút được chọn
+        // For cake/breakfast, compare with new option values
+        boolean isRegularSelected = cupType.equals("regular") || cupType.equals("with_jam");
+        boolean isPlasticSelected = cupType.equals("plastic") || cupType.equals("no_jam");
         btnCupRegular.setBackgroundTintList(getResources().getColorStateList(
-                cupType.equals("regular") ? R.color.coffee_primary : R.color.text_secondary, null));
+                isRegularSelected ? R.color.coffee_primary : R.color.text_secondary, null));
         btnCupPlastic.setBackgroundTintList(getResources().getColorStateList(
-                cupType.equals("plastic") ? R.color.coffee_primary : R.color.text_secondary, null));
+                isPlasticSelected ? R.color.coffee_primary : R.color.text_secondary, null));
     }
 
     /**
@@ -306,12 +380,16 @@ public class CoffeeDetailActivity extends AppCompatActivity {
         selectedIce = iceLevel;
 
         // Cập nhật UI - đổi màu nút được chọn
+        boolean isNone = iceLevel.equals("none") || iceLevel.equals("spicy");
+        boolean isLess = iceLevel.equals("less") || iceLevel.equals("mild");
+        boolean isMore = iceLevel.equals("more") || iceLevel.equals("non_spicy");
+
         btnIceNone.setBackgroundTintList(getResources().getColorStateList(
-                iceLevel.equals("none") ? R.color.coffee_primary : R.color.text_secondary, null));
+                isNone ? R.color.coffee_primary : R.color.text_secondary, null));
         btnIceLess.setBackgroundTintList(getResources().getColorStateList(
-                iceLevel.equals("less") ? R.color.coffee_primary : R.color.text_secondary, null));
+                isLess ? R.color.coffee_primary : R.color.text_secondary, null));
         btnIceMore.setBackgroundTintList(getResources().getColorStateList(
-                iceLevel.equals("more") ? R.color.coffee_primary : R.color.text_secondary, null));
+                isMore ? R.color.coffee_primary : R.color.text_secondary, null));
     }
 
     /**
@@ -386,4 +464,3 @@ public class CoffeeDetailActivity extends AppCompatActivity {
         dialog.show();
     }
 }
-

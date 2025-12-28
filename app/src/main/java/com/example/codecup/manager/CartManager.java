@@ -145,6 +145,18 @@ public class CartManager {
         saveToStorage(); // Lưu thay đổi
     }
 
+    // ===== NEW METHODS =====
+    public void clearData() {
+        cartItems = new ArrayList<>();
+        nextId = 1;
+        saveToStorage();
+    }
+
+    public void loadDataForUser(Context context, String userId) {
+        sharedPreferences = context.getSharedPreferences(PREF_NAME + "_" + userId, Context.MODE_PRIVATE);
+        loadFromStorage();
+    }
+
     // ===== GETTERS =====
 
     public List<CartItem> getCartItems() {
@@ -175,4 +187,3 @@ public class CartManager {
         return cartItems.isEmpty();
     }
 }
-

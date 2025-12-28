@@ -176,6 +176,20 @@ public class RewardsManager {
         return false;
     }
 
+    // ===== NEW METHODS =====
+    public void clearData() {
+        stampCount = 0;
+        totalPoints = 0;
+        loyaltyBonusCount = 0;
+        pointHistory = new ArrayList<>();
+        saveToStorage();
+    }
+
+    public void loadDataForUser(Context context, String userId) {
+        sharedPreferences = context.getSharedPreferences(PREF_NAME + "_" + userId, Context.MODE_PRIVATE);
+        loadFromStorage();
+    }
+
     // ===== GETTERS =====
     public int getStampCount() { return stampCount; }
     public int getTotalPoints() { return totalPoints; }

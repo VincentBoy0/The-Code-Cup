@@ -5,8 +5,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.util.Log;
+import android.widget.Toast;
 import android.widget.TextView;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,13 +16,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.codecup.adapter.CoffeeAdapter;
 import com.example.codecup.manager.CartManager;
 import com.example.codecup.manager.RewardsManager;
 import com.example.codecup.model.Coffee;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,12 +40,18 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnCoffeeClickListener {
 
+    private static final String TAG = "MainActivity";
+
     // ===== Khai báo các View =====
     private RecyclerView rvCoffeeList;
     private BottomNavigationView bottomNavigation;
     private ImageView ivCart;
     private TextView tvCartBadge;
     private TextView tvCustomerName;
+
+    // Category chips
+    private com.google.android.material.chip.ChipGroup chipGroupCategories;
+    private com.google.android.material.chip.Chip chipAll, chipCoffee, chipTea, chipBreakfast, chipCake, chipDrinks;
 
     // Loyalty Card Views
     private ImageView[] homeStamps = new ImageView[8];
@@ -60,6 +65,23 @@ public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // If user is not logged in, redirect to LoginActivity
+        android.content.SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        boolean isLoggedIn = prefs.getBoolean("is_logged_in", false);
+        if (!isLoggedIn) {
+            startActivity(new android.content.Intent(this, com.example.codecup.LoginActivity.class));
+            finish();
+            return;
+        }
+
+        // If logged in, load per-user data (so rewards/orders/cart are user-specific after restart)
+        String loggedUser = prefs.getString("logged_in_user", null);
+        if (loggedUser != null && !loggedUser.isEmpty()) {
+            com.example.codecup.manager.RewardsManager.getInstance().loadDataForUser(this, loggedUser);
+            com.example.codecup.manager.OrderManager.getInstance().loadDataForUser(this, loggedUser);
+            com.example.codecup.manager.CartManager.getInstance().loadDataForUser(this, loggedUser);
+        }
 
         // Bật Edge-to-Edge (hiển thị full màn hình)
         EdgeToEdge.enable(this);
@@ -108,6 +130,56 @@ public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnC
         homeStamps[5] = findViewById(R.id.home_stamp_6);
         homeStamps[6] = findViewById(R.id.home_stamp_7);
         homeStamps[7] = findViewById(R.id.home_stamp_8);
+
+        // Category chips
+        chipGroupCategories = findViewById(R.id.chip_group_categories);
+        chipAll = findViewById(R.id.chip_all);
+        chipCoffee = findViewById(R.id.chip_coffee);
+        chipTea = findViewById(R.id.chip_tea);
+        chipBreakfast = findViewById(R.id.chip_breakfast);
+        chipCake = findViewById(R.id.chip_cake);
+        chipDrinks = findViewById(R.id.chip_drinks);
+
+        // Listen for chip selection changes
+        chipGroupCategories.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            String category = "All";
+            if (checkedIds != null && !checkedIds.isEmpty()) {
+                int id = checkedIds.get(0);
+                if (id == R.id.chip_all) category = "All";
+                else if (id == R.id.chip_coffee) category = "Coffee";
+                else if (id == R.id.chip_tea) category = "Tea";
+                else if (id == R.id.chip_breakfast) category = "Breakfast";
+                else if (id == R.id.chip_cake) category = "Cake";
+                else if (id == R.id.chip_drinks) category = "Drinks";
+            }
+            filterByCategory(category);
+        });
+    }
+
+    /**
+     * Lọc danh sách theo category và cập nhật adapter
+     */
+    private void filterByCategory(String category) {
+        if (coffeeList == null) return;
+
+        if (category == null || category.equalsIgnoreCase("All")) {
+            // show all
+            coffeeAdapter = new CoffeeAdapter(this, coffeeList, this);
+            rvCoffeeList.setAdapter(coffeeAdapter);
+            coffeeAdapter.notifyDataSetChanged();
+            return;
+        }
+
+        List<Coffee> filtered = new ArrayList<>();
+        for (Coffee c : coffeeList) {
+            if (c.getCategory() != null && c.getCategory().equalsIgnoreCase(category)) {
+                filtered.add(c);
+            }
+        }
+
+        coffeeAdapter = new CoffeeAdapter(this, filtered, this);
+        rvCoffeeList.setAdapter(coffeeAdapter);
+        coffeeAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -127,6 +199,16 @@ public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnC
 
         // Gắn Adapter vào RecyclerView
         rvCoffeeList.setAdapter(coffeeAdapter);
+
+        // Ensure adapter refreshes view
+        coffeeAdapter.notifyDataSetChanged();
+
+        // Diagnostic: log how many items are present
+        Log.d(TAG, "Coffee items loaded: " + (coffeeList != null ? coffeeList.size() : 0));
+        Toast.makeText(this, "Coffee items: " + (coffeeList != null ? coffeeList.size() : 0), Toast.LENGTH_SHORT).show();
+
+        // Ensure initial category selection shows all
+        filterByCategory("All");
     }
 
     /**
@@ -141,35 +223,69 @@ public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnC
         // Coffee(id, name, description, price, imageResId)
         list.add(new Coffee(1, "Espresso",
                 "Strong and bold single shot of coffee. The foundation of all coffee drinks.",
-                3.50, R.drawable.ic_coffee_cup));
+                3.50, R.drawable.ic_coffee_cup, "Coffee"));
 
         list.add(new Coffee(2, "Americano",
                 "Espresso diluted with hot water. Smooth and full-bodied taste.",
-                4.00, R.drawable.ic_coffee_cup));
+                4.00, R.drawable.ic_coffee_cup, "Coffee"));
 
         list.add(new Coffee(3, "Cappuccino",
                 "Perfect balance of espresso, steamed milk, and milk foam.",
-                4.50, R.drawable.ic_coffee_cup));
+                4.50, R.drawable.ic_coffee_cup, "Coffee"));
 
         list.add(new Coffee(4, "Latte",
                 "Creamy espresso with steamed milk and light foam on top.",
-                4.50, R.drawable.ic_coffee_cup));
+                4.50, R.drawable.ic_coffee_cup, "Coffee"));
 
         list.add(new Coffee(5, "Mocha",
                 "Espresso with chocolate syrup, steamed milk and whipped cream.",
-                5.00, R.drawable.ic_coffee_cup));
+                5.00, R.drawable.ic_coffee_cup, "Coffee"));
 
         list.add(new Coffee(6, "Caramel Macchiato",
                 "Vanilla-flavored latte with caramel drizzle on top.",
-                5.50, R.drawable.ic_coffee_cup));
+                5.50, R.drawable.ic_coffee_cup, "Coffee"));
 
         list.add(new Coffee(7, "Cold Brew",
                 "Slow-steeped coffee for 12+ hours. Smooth and less acidic.",
-                4.50, R.drawable.ic_coffee_cup));
+                4.50, R.drawable.ic_coffee_cup, "Coffee"));
 
         list.add(new Coffee(8, "Vietnamese Coffee",
                 "Strong drip coffee with sweetened condensed milk. Rich and sweet.",
-                5.00, R.drawable.ic_coffee_cup));
+                5.00, R.drawable.ic_coffee_cup, "Coffee"));
+
+        // Additional home items (same style as existing ones)
+        list.add(new Coffee(9, "Croissant",
+                "Buttery, flaky croissant — perfect with your coffee.",
+                2.75, R.drawable.ic_coffee_cup, "Breakfast"));
+
+        list.add(new Coffee(10, "Blueberry Muffin",
+                "Moist muffin loaded with fresh blueberries.",
+                2.50, R.drawable.ic_coffee_cup, "Cake"));
+
+        list.add(new Coffee(11, "Avocado Toast",
+                "Smashed avocado on sourdough with a sprinkle of chili flakes.",
+                5.25, R.drawable.ic_coffee_cup, "Breakfast"));
+
+        list.add(new Coffee(12, "Ham & Cheese Sandwich",
+                "Toasted sandwich with savory ham and melted cheese.",
+                6.00, R.drawable.ic_coffee_cup, "Breakfast"));
+
+        list.add(new Coffee(13, "Pancake Stack",
+                "Fluffy pancakes served with maple syrup and butter.",
+                7.00, R.drawable.ic_coffee_cup, "Breakfast"));
+
+        list.add(new Coffee(14, "Fruit Smoothie",
+                "Mixed seasonal fruit blended with yogurt for a refreshing boost.",
+                4.75, R.drawable.ic_coffee_cup, "Drinks"));
+
+        // Add tea items so Tea category has content
+        list.add(new Coffee(15, "Green Tea",
+                "Light and refreshing green tea served hot.",
+                2.00, R.drawable.ic_coffee_cup, "Tea"));
+
+        list.add(new Coffee(16, "Earl Grey",
+                "Classic black tea with bergamot aroma.",
+                2.25, R.drawable.ic_coffee_cup, "Tea"));
 
         return list;
     }
@@ -188,7 +304,15 @@ public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnC
                 int itemId = item.getItemId();
 
                 if (itemId == R.id.nav_home) {
-                    // Đang ở Home rồi, không cần làm gì
+                    // Show home content (loyalty + coffee list)
+                    // ensure coffee list and loyalty visible
+                    findViewById(R.id.loyalty_card).setVisibility(View.VISIBLE);
+                    findViewById(R.id.rv_coffee_list).setVisibility(View.VISIBLE);
+                    return true;
+                } else if (itemId == R.id.nav_menu) {
+                    // No separate menu: behave same as Home
+                    findViewById(R.id.loyalty_card).setVisibility(View.VISIBLE);
+                    findViewById(R.id.rv_coffee_list).setVisibility(View.VISIBLE);
                     return true;
                 } else if (itemId == R.id.nav_orders) {
                     // Chuyển đến màn hình My Orders
@@ -291,6 +415,8 @@ public class MainActivity extends AppCompatActivity implements CoffeeAdapter.OnC
         intent.putExtra("coffee_description", coffee.getDescription());
         intent.putExtra("coffee_price", coffee.getPrice());
         intent.putExtra("coffee_image", coffee.getImageResId());
+        // Pass category so detail screen can adjust customization UI
+        intent.putExtra("coffee_category", coffee.getCategory());
 
         // Khởi chạy Activity mới
         startActivity(intent);

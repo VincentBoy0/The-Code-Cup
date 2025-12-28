@@ -49,10 +49,27 @@ public class CartItem {
 
     // Lấy text hiển thị chi tiết
     public String getDetailsText() {
-        String cup = cupType.equals("regular") ? "Regular Cup" : "Plastic Cup";
-        String ice = iceLevel.equals("none") ? "No Ice" :
-                (iceLevel.equals("less") ? "Less Ice" : "More Ice");
+        String cup;
+        String ice;
+        // Map values for drinks
+        if (cupType.equals("regular") || cupType.equals("plastic")) {
+            cup = cupType.equals("regular") ? "Regular Cup" : "Plastic Cup";
+        } else if (cupType.equals("with_jam") || cupType.equals("no_jam")) {
+            cup = cupType.equals("with_jam") ? "With Jam" : "No Jam";
+        } else {
+            cup = cupType; // fallback
+        }
+
+        if (iceLevel.equals("none") || iceLevel.equals("less") || iceLevel.equals("more")) {
+            ice = iceLevel.equals("none") ? "No Ice" : (iceLevel.equals("less") ? "Less Ice" : "More Ice");
+        } else if (iceLevel.equals("spicy") || iceLevel.equals("mild") || iceLevel.equals("non_spicy")) {
+            if (iceLevel.equals("spicy")) ice = "Spicy";
+            else if (iceLevel.equals("mild")) ice = "Mild";
+            else ice = "Non-Spicy";
+        } else {
+            ice = iceLevel; // fallback
+        }
+
         return String.format("Size %s | %s | %s", size, cup, ice);
     }
 }
-

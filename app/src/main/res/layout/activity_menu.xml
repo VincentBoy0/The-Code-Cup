@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <!-- Search bar -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/menuSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Search menu items" />
+
+    <!-- Diagnostic header -->
+    <TextView
+        android:id="@+id/menuHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="Menu"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Dark mode toggle -->
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/darkModeSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Dark mode" />
+
+    <!-- Category filter -->
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
+    <!-- RecyclerView for categories and items -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/menuRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="8dp" />
+
+</LinearLayout>

@@ -276,6 +276,7 @@
 
                     <!-- ==================== CHỌN LOẠI LY ==================== -->
                     <TextView
+                        android:id="@+id/tv_cup_heading"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Cup Type"
@@ -323,6 +324,7 @@
 
                     <!-- ==================== CHỌN ĐÁ ==================== -->
                     <TextView
+                        android:id="@+id/tv_ice_heading"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ice Level"

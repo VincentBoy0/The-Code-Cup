@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
  */
 public class ProfileManager {
 
-    private static final String PREF_NAME = "user_profile";
+    private static final String PREF_NAME_BASE = "user_profile";
     private static final String KEY_FULL_NAME = "full_name";
     private static final String KEY_PHONE = "phone";
     private static final String KEY_EMAIL = "email";
@@ -18,8 +18,29 @@ public class ProfileManager {
 
     private SharedPreferences sharedPreferences;
 
+    /**
+     * Default constructor: will try to read current logged-in user from app_prefs
+     */
     public ProfileManager(Context context) {
-        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences appPrefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+        String user = appPrefs.getString("logged_in_user", null);
+        if (user != null) {
+            sharedPreferences = context.getSharedPreferences(PREF_NAME_BASE + "_" + user, Context.MODE_PRIVATE);
+        } else {
+            // fallback to global profile (non-user-specific)
+            sharedPreferences = context.getSharedPreferences(PREF_NAME_BASE, Context.MODE_PRIVATE);
+        }
+    }
+
+    /**
+     * Explicit constructor for a specific userId (email)
+     */
+    public ProfileManager(Context context, String userId) {
+        if (userId != null && !userId.isEmpty()) {
+            sharedPreferences = context.getSharedPreferences(PREF_NAME_BASE + "_" + userId, Context.MODE_PRIVATE);
+        } else {
+            sharedPreferences = context.getSharedPreferences(PREF_NAME_BASE, Context.MODE_PRIVATE);
+        }
     }
 
     // ===== SAVE =====
@@ -54,15 +75,15 @@ public class ProfileManager {
     }
 
     public String getPhone() {
-        return sharedPreferences.getString(KEY_PHONE, "+1 234 567 8900");
+        return sharedPreferences.getString(KEY_PHONE, "");
     }
 
     public String getEmail() {
-        return sharedPreferences.getString(KEY_EMAIL, "coffee.lover@email.com");
+        return sharedPreferences.getString(KEY_EMAIL, "");
     }
 
     public String getAddress() {
-        return sharedPreferences.getString(KEY_ADDRESS, "123 Coffee Street, Bean City");
+        return sharedPreferences.getString(KEY_ADDRESS, "");
     }
 
     // ===== CLEAR =====
@@ -70,4 +91,3 @@ public class ProfileManager {
         sharedPreferences.edit().clear().apply();
     }
 }
-

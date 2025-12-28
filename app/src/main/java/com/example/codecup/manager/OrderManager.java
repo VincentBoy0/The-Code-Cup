@@ -170,5 +170,15 @@ public class OrderManager {
         orders.clear();
         saveToStorage();
     }
-}
 
+    // ===== NEW METHODS =====
+    public void clearData() {
+        orders = new ArrayList<>();
+        saveToStorage();
+    }
+
+    public void loadDataForUser(Context context, String userId) {
+        sharedPreferences = context.getSharedPreferences(PREF_NAME + "_" + userId, Context.MODE_PRIVATE);
+        loadFromStorage();
+    }
+}

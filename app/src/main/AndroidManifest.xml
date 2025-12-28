@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CodeCutCodeShit">
+        <!-- Login & Signup -->
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".SignupActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
 
         <!-- Màn hình chi tiết sản phẩm cà phê -->
         <activity
@@ -60,6 +70,12 @@
         <!-- Màn hình Profile -->
         <activity
             android:name=".ProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Menu screen (copied from codecup) -->
+        <activity
+            android:name=".MenuActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
     </application>
